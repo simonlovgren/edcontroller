@@ -1,81 +1,36 @@
 #include <Keyboard.h>
-#include "types.h"
+#include "Keymap.h"
+#include "ToggleSwitch.h"
+#include "ArmSwitch.h"
 
 /* 
  *  SwitchArray (simple toggle switches)
  */
 const short switches_len = 6; // Length of array
-keybinding switches[6]; // Keybindings for switches
-
-// Switch array setup
-switches[0].pin = 2;
-switches[0].keycodeDown = 'a';
-switches[0].keycodeUp = 'a';
-switches[0].mode = MODE_CLICK;
-switches[0].state = 0;
-
-switches[1].pin = 3;
-switches[1].keycodeDown = 'b';
-switches[1].keycodeUp = 'c';
-switches[1].mode = MODE_CLICK;
-switches[1].state = 0;
-
-switches[2].pin = 4;
-switches[2].keycodeDown = 'd';
-switches[2].keycodeUp = 'd';
-switches[2].mode = MODE_CLICK;
-switches[2].state = 0;
-
-switches[3].pin = 5;
-switches[3].keycodeDown = 'e';
-switches[3].keycodeUp = 'e';
-switches[3].mode = MODE_CLICK;
-switches[3].state = 0;
-
-switches[4].pin = 6;
-switches[4].keycodeDown = 'f';
-switches[4].keycodeUp = 'f';
-switches[4].mode = MODE_CLICK;
-switches[4].state = 0;
-
-switches[5].pin = 7;
-switches[5].keycodeDown = 'g';
-switches[5].keycodeUp = 'g';
-switches[5].mode = MODE_HOLD;
-switches[5].state = 0;
+ToggleSwitch switches[switches_len] = {
+  ToggleSwitch(2, '}', '}', MODE_CLICK),
+  ToggleSwitch(3, '{', '{', MODE_CLICK),
+  ToggleSwitch(4, 'z', 'z', MODE_HOLD),
+  ToggleSwitch(5, '@', '@', MODE_CLICK),
+  ToggleSwitch(6, '%', '%', MODE_CLICK),
+  ToggleSwitch(7, '^', '^', MODE_CLICK)
+};
 
 /* 
  *  Safety switches (Arm-switches) with builtin LED
  */
 const short armswitches_len = 1;
-armswitch armswitches[armswitches_len];
-
-/*
- * Arm-switches setup
- */
-armswitches[0] = (armswitch){9, {6, 'h', 'h', CLICK, 0}};
+ArmSwitch armswitches[armswitches_len] = {
+  ArmSwitch(8,9,'*','(', MODE_CLICK)  
+};
 
 /*
  * Prototypes
  */
-void keyChange(keybinding *kb, short state);
+void keyEvent(Keymap *km);
 
 
 void setup() {
-  // Initiate all switches in switch array
-  for(int i = 0; i < switches_len; ++i) {
-    pinMode(switches[i].pin, INPUT);
-    switches[i].state = digitalRead(switches[i].pin);
-  }
-
-  // Initiate all arm switches
-  for(int i = 0; i < armswitches_len; ++i) {
-    pinMode(armswitches[i].keymap.pin, INPUT);
-    armswitches[i].keymap.state = digitalRead(armswitches[i].keymap.pin);
-    pinMode(armswitches[i].ledpin, OUTPUT);
-    digitalWrite(armswitches[i].ledpin, LOW);
-  }
-  
   Serial.begin(9600);
 }
 
@@ -83,17 +38,16 @@ void loop() {
   // put your main code here, to run repeatedly:
   readSwitches();
   readArmSwitches();
-  delay(100);
 }
 
 void readArmSwitches() {
   boolean state;
   for(int i = 0; i < armswitches_len; ++i) {
-    state = digitalRead(armswitches[i].keymap.pin);
-    if(state != armswitches[i].keymap.state) {
-      keyChange(&armswitches[i].keymap, state);
-      armswitches[i].keymap.state = state;
-      digitalWrite(armswitches[i].ledpin, state);
+    state = digitalRead(armswitches[i]._pin);
+    if(state != armswitches[i]._state) {
+      armswitches[i]._state = state;
+      keyEvent(&armswitches[i]);
+      armswitches[i].led_toggle();
     }
   }
 }
@@ -101,31 +55,32 @@ void readArmSwitches() {
 void readSwitches() {
   boolean state;
   for(int i = 0; i < switches_len; ++i) {
-    state = digitalRead(switches[i].pin);
-    if(state != switches[i].state) {
-      keyChange(&switches[i], state);
-      switches[i].state = state;
+    state = digitalRead(switches[i]._pin);
+    if(state != switches[i]._state) {
+      switches[i]._state = state;
+      keyEvent(&switches[i]);
     }
   }
 }
 
-void keyChange(keybinding *kb, boolean state) {
+#define CLICK_DELAY 50
+void keyEvent(Keymap *km) {
   Keyboard.begin();
-  if(kb->mode == MODE_HOLD) {
-    if(state) {
-      Keyboard.press(kb->keycodeDown);
+  if(km->_mode == MODE_HOLD) {
+    if(km->_state) {
+      Keyboard.press(km->_keycodeDown);
     } else {
-      Keyboard.release(kb->keycodeDown);
+      Keyboard.release(km->_keycodeDown);
     }
-  } else if (kb->mode == MODE_CLICK) {
-    if(state) {
-      Keyboard.press(kb->keycodeDown);
-      delay(2);
-      Keyboard.release(kb->keycodeDown);
+  } else if (km->_mode == MODE_CLICK) {
+    if(km->_state) {
+      Keyboard.press(km->_keycodeDown);
+      delay(CLICK_DELAY);
+      Keyboard.release(km->_keycodeDown);
     } else {
-      Keyboard.press(kb->keycodeUp);
-      delay(2);
-      Keyboard.release(kb->keycodeUp);
+      Keyboard.press(km->_keycodeUp);
+      delay(CLICK_DELAY);
+      Keyboard.release(km->_keycodeUp);
     } 
   }
   Keyboard.end();

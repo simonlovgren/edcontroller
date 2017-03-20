@@ -8,11 +8,10 @@
      boolean _state;
 */
 
-Keymap::Keymap(unsigned short pin, unsigned char keycodeDown, unsigned char keycodeUp, switchmode mode, boolean state) {
-  _pin = pin;
+Keymap::Keymap(unsigned char keycodeDown, unsigned char keycodeUp, switchmode mode) {
   _keycodeDown = keycodeDown;
   _keycodeUp = keycodeUp;
   _mode = mode;
-  _state = state;
+  _state = 0;
 }
 

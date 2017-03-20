@@ -1,3 +1,7 @@
+#ifndef ED_KEYMAP
+#define ED_KEYMAP
+
+#include <Arduino.h>
 /*
  * Keymap class
  * @author Simon Lövgren
@@ -10,13 +14,12 @@ typedef unsigned char switchmode;
 
 class Keymap {
    public:
-     unsigned short _pin;
      unsigned char _keycodeDown;
      unsigned char _keycodeUp;
      switchmode _mode;
      boolean _state; 
    
-     Keymap(unsigned short pin, unsigned char keycodeDown, unsigned char keycodeUp, switchmode mode, boolean state);
-   private:
-}
+     Keymap(unsigned char keycodeDown, unsigned char keycodeUp, switchmode mode);
+};
 
+#endif
