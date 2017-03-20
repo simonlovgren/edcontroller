@@ -1,12 +1,16 @@
-#ifndef ED_KEYMAP
-#define ED_KEYMAP
-
-#include <Arduino.h>
 /*
  * Keymap class
  * @author Simon Lövgren
  * @file Keymap.h
  */
+
+#ifndef ED_KEYMAP
+#define ED_KEYMAP
+
+#include <Arduino.h>
+#include "edc.h"
+
+using namespace EDC;
 
 typedef unsigned char switchmode;
 #define MODE_HOLD 0

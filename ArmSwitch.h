@@ -1,13 +1,18 @@
+/*
+ * ArmSwitch class
+ * @author Simon Lövgren
+ * @file Keymap.h
+ */
+
+
 #ifndef ED_ARM_SWITCH
 #define ED_ARM_SWITCH
 
 #include <Arduino.h>
+#include "edc.h"
 #include "ToggleSwitch.h"
-/*
- * ToggleSwitch class
- * @author Simon Lövgren
- * @file Keymap.h
- */
+
+using namespace EDC;
 
 class ArmSwitch: public ToggleSwitch {
    public:

@@ -3,6 +3,8 @@
 #include "ToggleSwitch.h"
 #include "ArmSwitch.h"
 
+using namespace EDC;
+
 /* 
  *  SwitchArray (simple toggle switches)
  */
