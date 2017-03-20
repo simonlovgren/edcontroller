@@ -21,7 +21,7 @@ ToggleSwitch switches[switches_len] = {
  */
 const short armswitches_len = 1;
 ArmSwitch armswitches[armswitches_len] = {
-  ArmSwitch(8,9,'*','(', MODE_CLICK)  
+  ArmSwitch(8,10,'*','*', MODE_CLICK)  
 };
 
 /*
