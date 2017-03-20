@@ -10,12 +10,12 @@ using namespace EDC;
  */
 const short switches_len = 6; // Length of array
 ToggleSwitch switches[switches_len] = {
-  ToggleSwitch(2, '}', '}', MODE_CLICK),
-  ToggleSwitch(3, '{', '{', MODE_CLICK),
+  ToggleSwitch(2, '[', '[', MODE_CLICK),
+  ToggleSwitch(3, ']', ']', MODE_CLICK),
   ToggleSwitch(4, 'z', 'z', MODE_HOLD),
-  ToggleSwitch(5, '@', '@', MODE_CLICK),
-  ToggleSwitch(6, '%', '%', MODE_CLICK),
-  ToggleSwitch(7, '^', '^', MODE_CLICK)
+  ToggleSwitch(5, ';', ';', MODE_CLICK),
+  ToggleSwitch(6, '\'', '\'', MODE_CLICK),
+  ToggleSwitch(7, '/', '/', MODE_CLICK)
 };
 
 /* 
@@ -23,7 +23,7 @@ ToggleSwitch switches[switches_len] = {
  */
 const short armswitches_len = 1;
 ArmSwitch armswitches[armswitches_len] = {
-  ArmSwitch(8,10,'*','*', MODE_CLICK)  
+  ArmSwitch(8,10,'.','.', MODE_CLICK)  
 };
 
 /*
